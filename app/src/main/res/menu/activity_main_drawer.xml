@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/g1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/breakfast"
+            android:title="@string/breakfast" />
+        <item
+            android:id="@+id/lunch"
+            android:title="@string/lunch" />
+        <item
+            android:id="@+id/dinner"
+            android:title="@string/dinner" />
+
+        <item
+            android:id="@+id/drinks"
+            android:title="@string/drinks" />
+
+    </group>
+
+    <group
+        android:id="@+id/g2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/baseline_settings_black_18dp"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/info"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="@string/info" />
+    </group>
+
+</menu>
