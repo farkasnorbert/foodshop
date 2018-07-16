@@ -1,6 +1,8 @@
 package com.example.practica.foodshop;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,21 +15,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    ListView listView;
+    TableLayout table;
     private getData d;
     private ArrayList<Item> items;
     SwipeRefreshLayout Refresh;
@@ -44,7 +53,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        listView = (ListView) findViewById(R.id.listView);
+        table = (TableLayout) findViewById(R.id.table);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
@@ -96,11 +105,50 @@ public class MainActivity extends AppCompatActivity
             }
             int n = 0;
             for (Item i : items) {
-                mainpage[n] = i.toString();
+                TableRow tr = new TableRow(this);
+                tr.setId(n);
+
+                tr.setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+                TextView name = new TextView(this);
+                TextView text = new TextView(this);
+                ImageView img = new ImageView(this);
+                Button addcart = new Button(this);
+                addcart.setText("Add to cart");
+                addcart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+                name.setText(i.getName());
+                text.setText(i.getText());
+                String picture = "http://foodshopandroid.tk/" + i.getImg();
+                URL url = null;
+                /*try {
+                    url = new URL(picture);
+                    try {
+                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        img.setImageBitmap(bmp);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }*/
+                tr.addView(name);
+                tr.addView(text);
+                tr.addView(img);
+                tr.addView(addcart);
+                table.addView(tr, new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT));
+                //mainpage[n] = i.toString();
                 n++;
             }
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mainpage);
-            listView.setAdapter(arrayAdapter);
+            /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mainpage);
+            listView.setAdapter(arrayAdapter);*/
         }
     }
 
