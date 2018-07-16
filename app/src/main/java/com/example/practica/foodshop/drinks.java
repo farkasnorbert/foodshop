@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class breakfast extends AppCompatActivity {
+public class drinks extends AppCompatActivity {
     ListView listView;
     private getData d;
     private ArrayList<Item> items;
@@ -26,7 +26,7 @@ public class breakfast extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_breakfast);
+        setContentView(R.layout.activity_drinks);
         Toolbar toolbar =
                 (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,18 +34,21 @@ public class breakfast extends AppCompatActivity {
         d = new getData();
         listView = (ListView) findViewById(R.id.listView);
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-        Refresh.setOnRefreshListener(() -> {
-            d.getJSON("http://foodshopandroid.tk/breakfast.php", String -> {
-                try {
-                    loadIntoListView(String);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-            Refresh.setRefreshing(false);
+        Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                d.getJSON("http://foodshopandroid.tk/drinks.php", String -> {
+                    try {
+                        loadIntoListView(String);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+                Refresh.setRefreshing(false);
+            }
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/breakfast.php", String -> {
+        d.getJSON("http://foodshopandroid.tk/drinks.php", String -> {
             try {
                 loadIntoListView(String);
             } catch (JSONException e) {
@@ -87,7 +90,7 @@ public class breakfast extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.cart) {
             Intent intent = new Intent(this, cart.class);
-            intent.putExtra("back", 1);
+            intent.putExtra("back", 4);
             startActivity(intent);
             return true;
         } else {

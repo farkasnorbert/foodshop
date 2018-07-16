@@ -35,12 +35,17 @@
             android:name=".breakfast"
             android:label="@string/breakfast"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".lunch"
+        <activity
+            android:name=".lunch"
             android:label="@string/lunch"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".dinner"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".dinner"
             android:label="@string/dinner"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".drinks"
+            android:label="@string/drinks"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

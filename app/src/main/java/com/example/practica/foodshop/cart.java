@@ -44,7 +44,9 @@ public class cart extends AppCompatActivity {
                 startActivityForResult(myIntent, 0);
                 return true;
             case 4:
-                break;
+                myIntent = new Intent(getApplicationContext(), drinks.class);
+                startActivityForResult(myIntent, 0);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

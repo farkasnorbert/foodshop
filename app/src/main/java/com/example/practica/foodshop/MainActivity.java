@@ -2,44 +2,106 @@ package com.example.practica.foodshop;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ListView listView;
+    private getData d;
+    private ArrayList<Item> items;
+    SwipeRefreshLayout Refresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
+        d = new getData();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        listView = (ListView) findViewById(R.id.listView);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                d.getJSON("http://foodshopandroid.tk/main.php", String -> {
+                    try {
+                        loadIntoListView(String);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+                Refresh.setRefreshing(false);
+            }
+        });
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainlayout);
+        ImageView imageView = new ImageView(MainActivity.this);
+        /*//add a image
+        imageView.setImageResource(R.drawable.ic_menu_camera);
+        LayoutParams imageViewLayoutParams
+                = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        imageView.setLayoutParams(imageViewLayoutParams);
+        mainLayout.addView(imageView);
+        //add a text
+        TextView text = new TextView(MainActivity.this);
+        text.setText("asdasd");
+        mainLayout.addView(text);*/
+        Refresh.setRefreshing(true);
+        d.getJSON("http://foodshopandroid.tk/main.php", String -> {
+            try {
+                loadIntoListView(String);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        Refresh.setRefreshing(false);
+    }
+
+    private void loadIntoListView(String json) throws JSONException {
+        if (json != null) {
+            JSONArray jsonArray = new JSONArray(json);
+            String[] mainpage = new String[jsonArray.length()];
+            items = new ArrayList<Item>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"));
+                items.add(item);
+            }
+            int n = 0;
+            for (Item i : items) {
+                mainpage[n] = i.toString();
+                n++;
+            }
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mainpage);
+            listView.setAdapter(arrayAdapter);
+        }
     }
 
     @Override
@@ -68,8 +130,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.cart) {
-            Intent intent = new Intent(this,cart.class);
-            intent.putExtra("back",0);
+            Intent intent = new Intent(this, cart.class);
+            intent.putExtra("back", 0);
             startActivity(intent);
             return true;//kosarat meghivni
         }
@@ -93,17 +155,19 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.dinner:
-                intent = new Intent(this,dinner.class);
+                intent = new Intent(this, dinner.class);
                 startActivity(intent);
                 break;
             case R.id.drinks:
+                intent = new Intent(this, drinks.class);
+                startActivity(intent);
                 break;
             case R.id.breakfast:
-                intent = new Intent(this,breakfast.class);
+                intent = new Intent(this, breakfast.class);
                 startActivity(intent);
                 break;
             case R.id.lunch:
-                intent = new Intent(this,lunch.class);
+                intent = new Intent(this, lunch.class);
                 startActivity(intent);
                 break;
         }
