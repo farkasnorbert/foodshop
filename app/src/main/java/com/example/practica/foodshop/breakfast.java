@@ -43,15 +43,15 @@ public class breakfast extends AppCompatActivity {
         table = (TableLayout) findViewById(R.id.table);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        d = new getData(items, table, displayMetrics, this, getResources());
+        d = new getData(items, table, displayMetrics, getBaseContext(), getResources());
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/breakfast.php");
+            d.getJSON("http://foodshopandroid.tk/breakfast.php",1);
             Refresh.setRefreshing(false);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/breakfast.php");
+        d.getJSON("http://foodshopandroid.tk/breakfast.php",1);
         Refresh.setRefreshing(false);
     }
 

@@ -49,7 +49,8 @@
             android:name=".drinks"
             android:label="@string/drinks"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".moreinfo"></activity>
+        <activity android:name=".moreinfo"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,12 @@
 package com.example.practica.foodshop;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -19,13 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class load {
+public class load extends Activity {
     public load() {
     }
 
-    public void loadIntoViews(String json, ArrayList<Item> items, TableLayout table, DisplayMetrics displayMetrics, Context context, Resources resurce) throws JSONException {
+    public void loadIntoViews(String json, ArrayList<Item> items, TableLayout table, DisplayMetrics displayMetrics,final Context context, Resources resurce,int back) throws JSONException {
         if (json != null) {
             JSONArray jsonArray = new JSONArray(json);
             items = new ArrayList<Item>();
@@ -59,10 +64,19 @@ public class load {
                 icon.setBounds(0, 0, icon.getMinimumWidth(),
                         icon.getMinimumHeight());
                 addcart.setCompoundDrawables(icon,null,null,null);
-                addcart.setOnClickListener(new View.OnClickListener() {
+                addcart.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
 
+                    }
+                });
+                more.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, moreinfo.class);
+                        intent.putExtra("Item",i);
+                        intent.putExtra("back",back);
+                        context.startActivity(intent);
                     }
                 });
                 name.setText(i.getName());

@@ -1,5 +1,6 @@
 package com.example.practica.foodshop;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -14,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class getData {
+public class getData extends Activity {
     private ArrayList<Item> items;
     private TableLayout table;
     private DisplayMetrics displayMetrics;
@@ -31,7 +32,7 @@ public class getData {
         l = new load();
     }
 
-    public void getJSON(final String urlWebService) {
+    public void getJSON(final String urlWebService,int back) {
 
         class GetJSON extends AsyncTask<Void, Void, String> {
 
@@ -46,7 +47,7 @@ public class getData {
                 super.onPostExecute(s);
                 //metod.set(s);
                 try {
-                    l.loadIntoViews(s, items, table, displayMetrics, context, resurce);
+                    l.loadIntoViews(s, items, table, displayMetrics, context, resurce,back);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

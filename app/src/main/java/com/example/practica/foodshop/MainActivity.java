@@ -41,17 +41,17 @@ public class MainActivity extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        d = new getData(items,table,displayMetrics,this,getResources());
+        d = new getData(items,table,displayMetrics,getBaseContext(),getResources());
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                d.getJSON("http://foodshopandroid.tk/main.php");
+                d.getJSON("http://foodshopandroid.tk/main.php",0);
                 Refresh.setRefreshing(false);
             }
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/main.php");
+        d.getJSON("http://foodshopandroid.tk/main.php",0);
         Refresh.setRefreshing(false);
     }
 
