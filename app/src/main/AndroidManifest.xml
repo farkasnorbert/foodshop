@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.practica.foodshop">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -43,9 +45,11 @@
             android:name=".dinner"
             android:label="@string/dinner"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".drinks"
+        <activity
+            android:name=".drinks"
             android:label="@string/drinks"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".moreinfo"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

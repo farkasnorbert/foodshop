@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,77 +40,19 @@ public class breakfast extends AppCompatActivity {
                 (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        d = new getData();
         table = (TableLayout) findViewById(R.id.table);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        d = new getData(items, table, displayMetrics, this, getResources());
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/breakfast.php", String -> {
-                try {
-                    loadIntoListView(String);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
+            d.getJSON("http://foodshopandroid.tk/breakfast.php");
             Refresh.setRefreshing(false);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/breakfast.php", String -> {
-            try {
-                loadIntoListView(String);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        d.getJSON("http://foodshopandroid.tk/breakfast.php");
         Refresh.setRefreshing(false);
-    }
-
-    private void loadIntoListView(String json) throws JSONException {
-        if (json != null) {
-            JSONArray jsonArray = new JSONArray(json);
-            items = new ArrayList<Item>();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"),Double.parseDouble(obj.getString("price")));
-                items.add(item);
-            }
-            int n = 0;
-            for (Item i : items) {
-                TableRow tr = new TableRow(this);
-                tr.setId(n);
-
-                tr.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
-                TextView name = new TextView(this);
-                TextView text = new TextView(this);
-                ImageView img = new ImageView(this);
-                Button addcart = new Button(this);
-                TextView price = new TextView(this);
-                //addcart.setText("Add to cart");
-                addcart.setBackgroundResource(R.drawable.cartb);
-                addcart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-                name.setText(i.getName());
-                text.setText(i.getText());
-                price.setText(Double.toString(i.getPrice()));
-                String picture = "http://foodshopandroid.tk/" + i.getImg();
-                Picasso.get().load(picture).resize(500, 500).centerCrop().into(img);
-                tr.addView(name);
-                tr.addView(text);
-                tr.addView(img);
-                tr.addView(price);
-                tr.addView(addcart);
-                table.addView(tr, new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
-                n++;
-            }
-        }
     }
 
     @Override

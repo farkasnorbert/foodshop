@@ -1,12 +1,8 @@
 package com.example.practica.foodshop;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,21 +10,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,7 +30,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        d = new getData();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -54,34 +37,25 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         table = (TableLayout) findViewById(R.id.table);
         table.setStretchAllColumns(true);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        d = new getData(items,table,displayMetrics,this,getResources());
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                d.getJSON("http://foodshopandroid.tk/main.php", String -> {
-                    try {
-                        loadIntoListView(String);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
+                d.getJSON("http://foodshopandroid.tk/main.php");
                 Refresh.setRefreshing(false);
             }
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/main.php", String -> {
-            try {
-                loadIntoListView(String);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        d.getJSON("http://foodshopandroid.tk/main.php");
         Refresh.setRefreshing(false);
     }
 
-    private void loadIntoListView(String json) throws JSONException {
+    /*private void loadIntoListView(String json) throws JSONException {
         if (json != null) {
             JSONArray jsonArray = new JSONArray(json);
             items = new ArrayList<Item>();
@@ -150,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                 n++;
             }
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
