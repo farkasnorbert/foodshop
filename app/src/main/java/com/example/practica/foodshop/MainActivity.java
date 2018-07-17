@@ -1,25 +1,25 @@
 package com.example.practica.foodshop;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -30,9 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -56,13 +53,13 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         table = (TableLayout) findViewById(R.id.table);
+        table.setStretchAllColumns(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                table.removeAllViews();
                 d.getJSON("http://foodshopandroid.tk/main.php", String -> {
                     try {
                         loadIntoListView(String);
@@ -94,20 +91,30 @@ public class MainActivity extends AppCompatActivity
                 items.add(item);
             }
             int n = 0;
+            table.removeAllViews();
             for (Item i : items) {
                 TableRow tr = new TableRow(this);
+                TableRow tr2 = new TableRow(this);
                 tr.setId(n);
-
-                tr.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
+                tr2.setId(n);
+                TableLayout.LayoutParams trParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT);
+                trParams.setMargins(0, 0, 0, 0);
+                tr.setPadding(0, 0, 0, 0);
+                tr.setLayoutParams(trParams);
+                tr2.setPadding(0, 0, 0, 0);
+                tr2.setLayoutParams(trParams);
                 TextView name = new TextView(this);
-                TextView text = new TextView(this);
                 ImageView img = new ImageView(this);
                 Button addcart = new Button(this);
                 TextView price = new TextView(this);
-                //addcart.setText("Add to cart");
-                addcart.setBackgroundResource(R.drawable.cartb);
+                Button more = new Button(this);
+                addcart.setText("Add to cart");
+                more.setText("More info");
+                Drawable icon = ResourcesCompat.getDrawable(getResources(),R.drawable.cartb,null);
+                icon.setBounds(0, 0, icon.getMinimumWidth(),
+                        icon.getMinimumHeight());
+                addcart.setCompoundDrawables(icon,null,null,null);
                 addcart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -115,18 +122,31 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
                 name.setText(i.getName());
-                text.setText(i.getText());
                 price.setText(Double.toString(i.getPrice()));
                 String picture = "http://foodshopandroid.tk/" + i.getImg();
-                Picasso.get().load(picture).resize(500, 500).centerCrop().into(img);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+                Picasso.get().load(picture).resize(width/3,height/5).centerCrop().into(img);
+                name.setGravity(Gravity.CENTER);
+                img.setForegroundGravity(Gravity.LEFT);
+                addcart.setGravity(Gravity.RIGHT);
+                price.setGravity(Gravity.CENTER);
+                TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT);
+                p.span=3;
+                more.setLayoutParams(p);
                 tr.addView(name);
-                tr.addView(text);
-                tr.addView(img);
-                tr.addView(price);
-                tr.addView(addcart);
-                table.addView(tr, new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
+                tr.addView(more);
+                tr2.addView(img);
+                tr2.addView(price);
+                tr2.addView(addcart);
+                name.setTextSize(25);
+                name.setTypeface(name.getTypeface(), Typeface.BOLD_ITALIC);
+                price.setTextSize(25);
+                price.setTypeface(name.getTypeface(), Typeface.BOLD_ITALIC);
+                table.addView(tr, trParams);
+                table.addView(tr2, trParams);
                 n++;
             }
         }
