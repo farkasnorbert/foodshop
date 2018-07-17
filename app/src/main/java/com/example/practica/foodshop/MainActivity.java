@@ -24,6 +24,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
         Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                table.removeAllViews();
                 d.getJSON("http://foodshopandroid.tk/main.php", String -> {
                     try {
                         loadIntoListView(String);
@@ -70,18 +73,6 @@ public class MainActivity extends AppCompatActivity
                 Refresh.setRefreshing(false);
             }
         });
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainlayout);
-        ImageView imageView = new ImageView(MainActivity.this);
-        /*//add a image
-        imageView.setImageResource(R.drawable.ic_menu_camera);
-        LayoutParams imageViewLayoutParams
-                = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        imageView.setLayoutParams(imageViewLayoutParams);
-        mainLayout.addView(imageView);
-        //add a text
-        TextView text = new TextView(MainActivity.this);
-        text.setText("asdasd");
-        mainLayout.addView(text);*/
         Refresh.setRefreshing(true);
         d.getJSON("http://foodshopandroid.tk/main.php", String -> {
             try {
@@ -96,11 +87,10 @@ public class MainActivity extends AppCompatActivity
     private void loadIntoListView(String json) throws JSONException {
         if (json != null) {
             JSONArray jsonArray = new JSONArray(json);
-            String[] mainpage = new String[jsonArray.length()];
             items = new ArrayList<Item>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"));
+                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"), Double.parseDouble(obj.getString("price")));
                 items.add(item);
             }
             int n = 0;
@@ -115,7 +105,9 @@ public class MainActivity extends AppCompatActivity
                 TextView text = new TextView(this);
                 ImageView img = new ImageView(this);
                 Button addcart = new Button(this);
-                addcart.setText("Add to cart");
+                TextView price = new TextView(this);
+                //addcart.setText("Add to cart");
+                addcart.setBackgroundResource(R.drawable.cartb);
                 addcart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -124,31 +116,19 @@ public class MainActivity extends AppCompatActivity
                 });
                 name.setText(i.getName());
                 text.setText(i.getText());
+                price.setText(Double.toString(i.getPrice()));
                 String picture = "http://foodshopandroid.tk/" + i.getImg();
-                URL url = null;
-                /*try {
-                    url = new URL(picture);
-                    try {
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        img.setImageBitmap(bmp);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }*/
+                Picasso.get().load(picture).resize(500, 500).centerCrop().into(img);
                 tr.addView(name);
                 tr.addView(text);
                 tr.addView(img);
+                tr.addView(price);
                 tr.addView(addcart);
                 table.addView(tr, new TableLayout.LayoutParams(
                         TableLayout.LayoutParams.MATCH_PARENT,
                         TableLayout.LayoutParams.WRAP_CONTENT));
-                //mainpage[n] = i.toString();
                 n++;
             }
-            /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mainpage);
-            listView.setAdapter(arrayAdapter);*/
         }
     }
 
