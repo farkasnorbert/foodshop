@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 public class cart extends AppCompatActivity {
     private int back;
-
+    private Item i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +20,7 @@ public class cart extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             back = bundle.getInt("back");
+            i = (Item) bundle.get("item");
         }
     }
 
@@ -49,6 +50,7 @@ public class cart extends AppCompatActivity {
                 return true;
             case 5:
                 myIntent = new Intent(getApplicationContext(), moreinfo.class);
+                myIntent.putExtra("Item",i);
                 startActivityForResult(myIntent, 0);
                 return true;
         }

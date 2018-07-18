@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -23,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class load extends Activity {
@@ -80,7 +77,7 @@ public class load extends Activity {
                     }
                 });
                 name.setText(i.getName());
-                price.setText(Double.toString(i.getPrice()));
+                price.setText("Price:\n"+Double.toString(i.getPrice()));
                 String picture = "http://foodshopandroid.tk/" + i.getImg();
                 int height = displayMetrics.heightPixels;
                 int width = displayMetrics.widthPixels;
@@ -100,7 +97,7 @@ public class load extends Activity {
                 name.setTextSize(25);
                 name.setTypeface(name.getTypeface(), Typeface.BOLD_ITALIC);
                 price.setTextSize(25);
-                price.setTypeface(name.getTypeface(), Typeface.BOLD_ITALIC);
+                price.setTypeface(price.getTypeface(), Typeface.BOLD_ITALIC);
                 table.addView(tr, trParams);
                 table.addView(tr2, trParams);
                 n++;

@@ -1,33 +1,63 @@
 package com.example.practica.foodshop;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class moreinfo extends AppCompatActivity {
     private int back=0;
-
+    private Item i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moreinfo);
         TextView t = (TextView) findViewById(R.id.textView);
         Toolbar toolbar =
-                (Toolbar) findViewById(R.id.toolbar);
+                (Toolbar) findViewById(R.id.toolbar3);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        Item i;
         if (bundle != null) {
             back = bundle.getInt("back");
             i = (Item) bundle.get("Item");
-            t.setText(i.getName());
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            String picture = "http://foodshopandroid.tk/" + i.getImg();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+            Picasso.get().load(picture).resize(width,height/2).centerCrop().into(img);
+            this.setTitle(i.getName());
+            t.setText(i.getText());
+            t.setTextSize(20);
+            TextView price = (TextView) findViewById(R.id.textView2);
+            price.setText("Price:"+Double.toString(i.getPrice()));
+            price.setTextSize(25);
+            price.setTypeface(price.getTypeface(), Typeface.BOLD_ITALIC);
+            Button addcart = (Button) findViewById(R.id.button) ;
+            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.cartb,null);
+            icon.setBounds(0, 0, icon.getMinimumWidth(),
+                    icon.getMinimumHeight());
+            addcart.setCompoundDrawables(icon,null,null,null);
+            addcart.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
 
     }
@@ -43,6 +73,7 @@ public class moreinfo extends AppCompatActivity {
         if (id == R.id.cart) {
             Intent intent = new Intent(this, cart.class);
             intent.putExtra("back", 5);
+            intent.putExtra("item", i);
             startActivity(intent);
             return true;
         } else {
