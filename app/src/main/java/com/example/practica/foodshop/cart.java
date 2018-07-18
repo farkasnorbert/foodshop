@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -22,10 +24,12 @@ public class cart extends AppCompatActivity {
     private Item i;
     private loadcart l;
     private SwipeRefreshLayout Refresh;
+    private ArrayList<Bundle> d;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         Toolbar toolbar =
                 (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,42 +50,51 @@ public class cart extends AppCompatActivity {
         Refresh.setRefreshing(true);
         load(l);
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cartmenu, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent;
-        switch (back) {
-            case 0:
-                myIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case 1:
-                myIntent = new Intent(getApplicationContext(), breakfast.class);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case 2:
-                myIntent = new Intent(getApplicationContext(), lunch.class);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case 3:
-                myIntent = new Intent(getApplicationContext(), dinner.class);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case 4:
-                myIntent = new Intent(getApplicationContext(), drinks.class);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case 5:
-                myIntent = new Intent(getApplicationContext(), moreinfo.class);
-                myIntent.putExtra("Item", i);
-                startActivityForResult(myIntent, 0);
-                return true;
+        int id = item.getItemId();
+        if (id == R.id.cart) {
+            send();
+        }else {
+            Intent myIntent;
+            switch (back) {
+                case 0:
+                    myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 1:
+                    myIntent = new Intent(getApplicationContext(), breakfast.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 2:
+                    myIntent = new Intent(getApplicationContext(), lunch.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 3:
+                    myIntent = new Intent(getApplicationContext(), dinner.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 4:
+                    myIntent = new Intent(getApplicationContext(), drinks.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 5:
+                    myIntent = new Intent(getApplicationContext(), moreinfo.class);
+                    myIntent.putExtra("Item", i);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void load(loadcart l) {
-        ArrayList<Bundle> d = l.get();
+        d = l.get();
         TableLayout table = (TableLayout) findViewById(R.id.table);
         table.removeAllViews();
         for (Bundle i : d) {
@@ -100,6 +113,8 @@ public class cart extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         l.delete(id);
+                        Refresh.setRefreshing(true);
+                        load(l);
                     }
                 });
                 name.setText(i.getString("name"));
@@ -112,5 +127,8 @@ public class cart extends AppCompatActivity {
             }
         }
         Refresh.setRefreshing(false);
+    }
+    private void send(){
+
     }
 }
