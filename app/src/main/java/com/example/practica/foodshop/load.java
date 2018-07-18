@@ -64,7 +64,8 @@ public class load extends Activity {
                 addcart.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-
+                        loadcart l= new loadcart(context);
+                        l.load(i);
                     }
                 });
                 more.setOnClickListener(new View.OnClickListener(){

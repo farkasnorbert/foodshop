@@ -1,14 +1,27 @@
 package com.example.practica.foodshop;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class cart extends AppCompatActivity {
     private int back;
     private Item i;
+    private loadcart l;
+    private SwipeRefreshLayout Refresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +35,16 @@ public class cart extends AppCompatActivity {
             back = bundle.getInt("back");
             i = (Item) bundle.get("item");
         }
+        l = new loadcart(this);
+        Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                load(l);
+            }
+        });
+        Refresh.setRefreshing(true);
+        load(l);
     }
 
     @Override
@@ -50,11 +73,44 @@ public class cart extends AppCompatActivity {
                 return true;
             case 5:
                 myIntent = new Intent(getApplicationContext(), moreinfo.class);
-                myIntent.putExtra("Item",i);
+                myIntent.putExtra("Item", i);
                 startActivityForResult(myIntent, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void load(loadcart l) {
+        ArrayList<Bundle> d = l.get();
+        TableLayout table = (TableLayout) findViewById(R.id.table);
+        table.removeAllViews();
+        for (Bundle i : d) {
+            if (i != null) {
+                TableRow tr = new TableRow(this);
+                TextView name = new TextView(this);
+                TextView price = new TextView(this);
+                Button delete = new Button(this);
+                EditText number = new EditText(this);
+                int id=i.getInt("id");
+                Log.d("name2",i.getString("name"));
+                number.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+                number.setText("1");
+                delete.setText("Delete");
+                delete.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        l.delete(id);
+                    }
+                });
+                name.setText(i.getString("name"));
+                price.setText(Double.toString(i.getDouble("price")));
+                tr.addView(name);
+                tr.addView(price);
+                tr.addView(number);
+                tr.addView(delete);
+                table.addView(tr);
+            }
+        }
+        Refresh.setRefreshing(false);
+    }
 }

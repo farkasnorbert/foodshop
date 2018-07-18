@@ -1,5 +1,6 @@
 package com.example.practica.foodshop;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -52,10 +53,12 @@ public class moreinfo extends AppCompatActivity {
             icon.setBounds(0, 0, icon.getMinimumWidth(),
                     icon.getMinimumHeight());
             addcart.setCompoundDrawables(icon,null,null,null);
+            Context c = this;
             addcart.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-
+                    loadcart l= new loadcart(c);
+                    l.load(i);
                 }
             });
         }
