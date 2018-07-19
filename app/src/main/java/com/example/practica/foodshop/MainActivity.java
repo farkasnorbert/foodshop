@@ -46,13 +46,13 @@ public class MainActivity extends AppCompatActivity
         Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                d.getJSON("http://foodshopandroid.tk/main.php",0);
-                Refresh.setRefreshing(false);
+                d.getJSON("http://foodshopandroid.tk/main.php",0,Refresh);
+                //Refresh.setRefreshing(false);
             }
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/main.php",0);
-        Refresh.setRefreshing(false);
+        d.getJSON("http://foodshopandroid.tk/main.php",0,Refresh);
+       // Refresh.setRefreshing(false);
     }
 
     @Override

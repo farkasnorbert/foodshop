@@ -33,12 +33,12 @@ public class dinner extends AppCompatActivity {
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/dinner.php",3);
-            Refresh.setRefreshing(false);
+            d.getJSON("http://foodshopandroid.tk/dinner.php",3,Refresh);
+            //Refresh.setRefreshing(false);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/dinner.php",3);
-        Refresh.setRefreshing(false);
+        d.getJSON("http://foodshopandroid.tk/dinner.php",3,Refresh);
+        //Refresh.setRefreshing(false);
     }
 
     @Override

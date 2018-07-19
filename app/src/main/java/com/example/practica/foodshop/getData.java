@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.widget.TableLayout;
 
@@ -32,7 +33,7 @@ public class getData extends Activity {
         l = new load();
     }
 
-    public void getJSON(final String urlWebService,int back) {
+    public void getJSON(final String urlWebService,int back,SwipeRefreshLayout Refresh) {
 
         class GetJSON extends AsyncTask<Void, Void, String> {
 
@@ -47,7 +48,7 @@ public class getData extends Activity {
                 super.onPostExecute(s);
                 //metod.set(s);
                 try {
-                    l.loadIntoViews(s, items, table, displayMetrics, context, resurce,back);
+                    l.loadIntoViews(s, items, table, displayMetrics, context, resurce,back,Refresh);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

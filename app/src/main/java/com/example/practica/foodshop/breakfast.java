@@ -47,12 +47,12 @@ public class breakfast extends AppCompatActivity {
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/breakfast.php",1);
-            Refresh.setRefreshing(false);
+            d.getJSON("http://foodshopandroid.tk/breakfast.php",1,Refresh);
+            //Refresh.setRefreshing(false);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/breakfast.php",1);
-        Refresh.setRefreshing(false);
+        d.getJSON("http://foodshopandroid.tk/breakfast.php",1,Refresh);
+        //Refresh.setRefreshing(false);
     }
 
     @Override

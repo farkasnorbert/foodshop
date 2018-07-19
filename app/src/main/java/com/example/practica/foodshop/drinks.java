@@ -33,12 +33,12 @@ public class drinks extends AppCompatActivity {
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/drinks.php",4);
-            Refresh.setRefreshing(false);
+            d.getJSON("http://foodshopandroid.tk/drinks.php",4,Refresh);
+            //Refresh.setRefreshing(false);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/drinks.php",4);
-        Refresh.setRefreshing(false);
+        d.getJSON("http://foodshopandroid.tk/drinks.php",4,Refresh);
+        //Refresh.setRefreshing(false);
     }
 
     @Override

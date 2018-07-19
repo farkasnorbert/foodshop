@@ -66,7 +66,6 @@ public class moreinfo extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -76,35 +75,34 @@ public class moreinfo extends AppCompatActivity {
         if (id == R.id.cart) {
             Intent intent = new Intent(this, cart.class);
             intent.putExtra("back", 5);
+            intent.putExtra("back2",back);
             intent.putExtra("item", i);
             startActivity(intent);
             return true;
         } else {
-            String s = "";
-            Class<?> myclass = null;
-            switch (back){
-                case 0: s="MainActivity";
-                break;
-                case 1: s="breakfast";
-                    break;
-                case 2: s="lunch";
-                    break;
-                case 3: s="dinner";
-                    break;
-                case 4: s="drinks";
-                    break;
+            Intent myIntent;
+            switch (back) {
+                case 0:
+                    myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 1:
+                    myIntent = new Intent(getApplicationContext(), breakfast.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 2:
+                    myIntent = new Intent(getApplicationContext(), lunch.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 3:
+                    myIntent = new Intent(getApplicationContext(), dinner.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
+                case 4:
+                    myIntent = new Intent(getApplicationContext(), drinks.class);
+                    startActivityForResult(myIntent, 0);
+                    return true;
             }
-            try {
-                myclass = Class.forName("com.example.practica.foodshop."+s);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            Intent myIntent = new Intent(getApplicationContext(), myclass);
-            startActivityForResult(myIntent, 0);
-            /*Intent myIntent;
-            myIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivityForResult(myIntent, 0);*/
             return true;
         }
     }

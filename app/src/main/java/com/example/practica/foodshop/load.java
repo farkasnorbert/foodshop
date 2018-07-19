@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -27,13 +28,13 @@ public class load extends Activity {
     public load() {
     }
 
-    public void loadIntoViews(String json, ArrayList<Item> items, TableLayout table, DisplayMetrics displayMetrics,final Context context, Resources resurce,int back) throws JSONException {
+    public void loadIntoViews(String json, ArrayList<Item> items, TableLayout table, DisplayMetrics displayMetrics,final Context context, Resources resurce,int back,SwipeRefreshLayout Refresh) throws JSONException {
         if (json != null) {
             JSONArray jsonArray = new JSONArray(json);
             items = new ArrayList<Item>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"), Double.parseDouble(obj.getString("price")));
+                Item item = new Item(obj.getString("name"), obj.getString("text"), obj.getString("picture"), Double.parseDouble(obj.getString("price")),Integer.parseInt(obj.getString("id")));
                 items.add(item);
             }
             int n = 0;
@@ -104,5 +105,6 @@ public class load extends Activity {
                 n++;
             }
         }
+        Refresh.setRefreshing(false);
     }
 }

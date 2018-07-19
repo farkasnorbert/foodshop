@@ -33,17 +33,14 @@ public class lunch extends AppCompatActivity {
         Refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         Refresh.setOnRefreshListener(() -> {
             table.removeAllViews();
-            d.getJSON("http://foodshopandroid.tk/lunch.php",2);
-            Refresh.setRefreshing(false);
+            d.getJSON("http://foodshopandroid.tk/lunch.php",2,Refresh);
         });
         Refresh.setRefreshing(true);
-        d.getJSON("http://foodshopandroid.tk/lunch.php",2);
-        Refresh.setRefreshing(false);
+        d.getJSON("http://foodshopandroid.tk/lunch.php",2,Refresh);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }

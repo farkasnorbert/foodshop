@@ -27,20 +27,16 @@ public class loadcart extends SQLiteOpenHelper {
     }
     public void load(Item item) {
         SQLiteDatabase cart = this.getWritableDatabase();
-        Cursor res = cart.rawQuery("select count(*) from items where name == '"+item.getName()+"'",null);
+        int id = item.getId();
+        Cursor res = cart.rawQuery("select count(*) from items where id = "+Integer.toString(id)+";",null);
         res.moveToFirst();
         int ok = res.getInt(0);
         if(ok==0) {
-            int id = 0;
-            Cursor max = cart.rawQuery("Select max(id) from items", null);
-            max.moveToFirst();
-            id = max.getInt(0) + 1;
             ContentValues contentValues = new ContentValues();
             contentValues.put("id", Integer.toString(id));
             contentValues.put("name", item.getName());
             contentValues.put("price", Double.toString(item.getPrice()));
             cart.insert("items", null, contentValues);
-            max.close();
         }
         res.close();
     }
@@ -51,7 +47,6 @@ public class loadcart extends SQLiteOpenHelper {
         ArrayList<Bundle> x = new ArrayList<Bundle>();
         while(res.isAfterLast() == false) {
             Bundle b = new Bundle();
-            Log.d("name",res.getString(res.getColumnIndex("name")));
             b.putInt("id",Integer.parseInt(res.getString(res.getColumnIndex("id"))));
             b.putString("name",res.getString(res.getColumnIndex("name")));
             b.putDouble("price",Double.parseDouble(res.getString(res.getColumnIndex("price"))));
@@ -64,5 +59,9 @@ public class loadcart extends SQLiteOpenHelper {
     public void delete(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("items","id="+Integer.toString(id),null);
+    }
+    public void drop(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("items","",null);
     }
 }

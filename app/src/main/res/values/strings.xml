@@ -14,4 +14,7 @@
     <string name="drinks">Drinks</string>
     <string name="info">Information</string>
     <string name="cart">Cart</string>
+    <string name="name">Name:</string>
+    <string name="phone_number">Phone number:</string>
+    <string name="address">Address:</string>
 </resources>
