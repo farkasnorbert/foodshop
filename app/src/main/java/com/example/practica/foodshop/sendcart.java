@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -18,8 +19,11 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class sendcart extends AppCompatActivity {
     private int back;
@@ -95,32 +99,15 @@ public class sendcart extends AppCompatActivity {
                 item.put("id",i.getInt("id"));
                 item.put("iname",i.getString("name"));
                 item.put("price",i.getDouble("price"));
+                item.put("number",i.getString("number"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             items.put(item);
         }
-        //new HttpAsyncTask().execute("http://foodshopandroid.tk/order.php",);
-
+        Log.d("items",items.toString());
         loadcart l = new loadcart(this);
         l.drop();
         return true;
     }
-    /*private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            /*person = new Person();
-            person.setName(etName.getText().toString());
-            person.setCountry(etCountry.getText().toString());
-            person.setTwitter(etTwitter.getText().toString());
-
-            return; //POST(urls[0],person);
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
-        }
-    }*/
 }

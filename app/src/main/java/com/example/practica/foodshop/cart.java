@@ -28,6 +28,7 @@ public class cart extends AppCompatActivity {
     private loadcart l;
     private SwipeRefreshLayout Refresh;
     private ArrayList<Bundle> d;
+    private ArrayList<EditText> numbers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,10 @@ public class cart extends AppCompatActivity {
         if (id == R.id.send) {
             if(d.size()>0) {
                 Intent in = new Intent(getApplicationContext(), sendcart.class);
+                int n=0;
+                for(EditText number : numbers){
+                    d.get(n).putString("number",number.getText().toString());
+                }
                 in.putExtra("back", back);
                 in.putExtra("cart", d);
                 in.putExtra("item", i);
@@ -119,8 +124,10 @@ public class cart extends AppCompatActivity {
             tr.addView(text);
             table.addView(tr);
         }else {
+            numbers = new ArrayList<EditText>();
             for (Bundle i : d) {
                 if (i != null) {
+                    Bundle ci = new Bundle();
                     TableRow tr = new TableRow(this);
                     TextView name = new TextView(this);
                     TextView price = new TextView(this);
@@ -140,6 +147,7 @@ public class cart extends AppCompatActivity {
                     });
                     name.setText(i.getString("name"));
                     price.setText(Double.toString(i.getDouble("price")));
+                    numbers.add(number);
                     tr.addView(name);
                     tr.addView(price);
                     tr.addView(number);
