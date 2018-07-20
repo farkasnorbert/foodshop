@@ -13,7 +13,7 @@ public class info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
         Toolbar toolbar =
-                (Toolbar) findViewById(R.id.toolbar);
+                (Toolbar) findViewById(R.id.toolbarinfo);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

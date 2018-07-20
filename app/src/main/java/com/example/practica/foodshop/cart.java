@@ -2,12 +2,11 @@ package com.example.practica.foodshop;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -147,6 +146,10 @@ public class cart extends AppCompatActivity {
                     });
                     name.setText(i.getString("name"));
                     price.setText(Double.toString(i.getDouble("price")));
+                    name.setTextSize(20);
+                    price.setTextSize(20);
+                    name.setTypeface(name.getTypeface(), Typeface.BOLD_ITALIC);
+                    price.setTypeface(price.getTypeface(), Typeface.BOLD_ITALIC);
                     numbers.add(number);
                     tr.addView(name);
                     tr.addView(price);
