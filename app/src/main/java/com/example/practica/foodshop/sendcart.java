@@ -226,9 +226,9 @@ public class sendcart extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            /*Log.d("result",result);
-            Toast.makeText(getApplicationContext(), result,
-                    Toast.LENGTH_LONG).show();*/
+            Log.d("result",result);
+            Toast.makeText(getApplicationContext(), "Order sent",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
